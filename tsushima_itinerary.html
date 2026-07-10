@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>TSUSHIMA · 대마도 2박 3일</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root{
+    --ink:#0D2B2A;
+    --sea:#1F7A6C;
+    --sea-light:#3FA791;
+    --foam:#EAF4EF;
+    --sand:#F7F2E6;
+    --coral:#FF6F5E;
+    --coral-soft:#FFE3DE;
+    --gold:#D79A2C;
+    --gold-soft:#FBEACB;
+    --brown:#8A5A3B;
+    --brown-soft:#F1E2D3;
+    --blue:#2E6FA7;
+    --blue-soft:#DEEBF6;
+    --text:#16302E;
+    --text-soft:#5C726E;
+    --line:#D8E4DE;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--sand);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(31,122,108,0.10), transparent 40%),
+      radial-gradient(circle at 90% 15%, rgba(255,111,94,0.10), transparent 35%);
+    font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
+    color:var(--text);
+    display:flex;
+    justify-content:center;
+    min-height:100vh;
+    padding:0 0 60px;
+  }
+  .page{
+    width:100%;
+    max-width:480px;
+    background:var(--sand);
+    min-height:100vh;
+    position:relative;
+    padding-bottom:20px;
+  }
+  .display{font-family:'Fraunces',serif;}
+
+  /* ---------- HERO : 탑승권(보딩패스) ---------- */
+  .hero{
+    background:linear-gradient(160deg,var(--ink) 0%, var(--sea) 100%);
+    color:#fff;
+    padding:34px 24px 26px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; right:-40px; top:-40px;
+    width:160px;height:160px;border-radius:50%;
+    background:rgba(255,255,255,0.06);
+  }
+  .hero-eyebrow{
+    font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+    color:rgba(255,255,255,0.65); font-weight:600; margin-bottom:10px;
+  }
+  .hero-title{
+    font-size:44px; line-height:1; font-weight:600; font-style:italic;
+    letter-spacing:-0.01em;
+  }
+  .hero-sub{
+    margin-top:8px; font-size:14.5px; color:rgba(255,255,255,0.82); font-weight:500;
+  }
+  .hero-meta{
+    margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;
+  }
+  .hero-chip{
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.25);
+    padding:6px 12px; border-radius:100px; font-size:12px; font-weight:600;
+    display:flex; align-items:center; gap:6px;
+  }
+  .route{
+    margin-top:22px; display:flex; align-items:center; gap:8px;
+    font-family:'Fraunces',serif; font-size:15px; font-weight:600; letter-spacing:.03em;
+  }
+  .route .dot{width:6px;height:6px;border-radius:50%;background:var(--coral);}
+  .route .line{flex:1;height:1px;background:repeating-linear-gradient(90deg, rgba(255,255,255,0.5) 0 6px, transparent 6px 11px);}
+
+  .perforation{
+    height:22px; background:var(--sand);
+    -webkit-mask-image: radial-gradient(circle 7px at 16px 0, transparent 7px, black 7.5px);
+    mask-image: radial-gradient(circle 7px at 16px 0, transparent 7px, black 7.5px);
+    -webkit-mask-repeat:repeat-x; mask-repeat:repeat-x; -webkit-mask-size:32px 22px; mask-size:32px 22px;
+    margin-top:-1px; position:relative; z-index:2;
+  }
+  .perforation-top{
+    background:linear-gradient(160deg,var(--ink) 0%, var(--sea) 100%);
+    -webkit-mask-image: radial-gradient(circle 7px at 16px 22px, transparent 7px, black 7.5px);
+    mask-image: radial-gradient(circle 7px at 16px 22px, transparent 7px, black 7.5px);
+  }
+
+  /* ---------- DAY TABS ---------- */
+  .tabs{
+    display:flex; gap:8px; padding:16px 20px 6px;
+    position:sticky; top:0; background:var(--sand); z-index:10;
+    border-bottom:1px dashed var(--line);
+  }
+  .tab{
+    flex:1; text-align:center; padding:10px 4px 9px; border-radius:12px;
+    background:#fff; border:1.5px solid var(--line); cursor:pointer;
+    transition:all .2s ease;
+  }
+  .tab .tnum{font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:var(--text);}
+  .tab .tloc{font-size:10.5px; color:var(--text-soft); font-weight:600; margin-top:1px;}
+  .tab.active{
+    background:var(--ink); border-color:var(--ink);
+    box-shadow:0 6px 14px rgba(13,43,42,0.25);
+  }
+  .tab.active .tnum, .tab.active .tloc{color:#fff;}
+
+  .day{display:none; padding:18px 20px 8px; animation:fade .35s ease;}
+  .day.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .day-head{margin-bottom:16px;}
+  .day-head .dtitle{font-family:'Fraunces',serif; font-size:23px; font-weight:600; font-style:italic;}
+  .day-head .ddesc{font-size:13px; color:var(--text-soft); margin-top:3px; line-height:1.5;}
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{position:relative; padding-left:2px;}
+  .stop{position:relative; padding-left:26px; padding-bottom:22px;}
+  .stop:last-child{padding-bottom:4px;}
+  .stop::before{
+    content:""; position:absolute; left:6px; top:4px; bottom:-4px; width:1px;
+    background:var(--line);
+  }
+  .stop:last-child::before{display:none;}
+  .stop::after{
+    content:""; position:absolute; left:1px; top:4px; width:11px; height:11px;
+    border-radius:50%; background:#fff; border:2.5px solid var(--sea);
+  }
+  .stop.tag-sea::after{border-color:var(--blue);}
+  .stop.tag-food::after{border-color:var(--coral);}
+  .stop.tag-cafe::after{border-color:var(--brown);}
+  .stop.tag-shop::after{border-color:var(--gold);}
+
+  .time{font-family:'Fraunces',serif; font-size:12.5px; font-weight:600; color:var(--text-soft); letter-spacing:.03em;}
+  .card{
+    margin-top:6px; background:#fff; border:1px solid var(--line); border-radius:16px;
+    padding:14px 15px 15px;
+  }
+  .card-top{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .card-title{font-size:16px; font-weight:700; letter-spacing:-.01em;}
+  .tag{
+    font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:100px; white-space:nowrap;
+  }
+  .tag-nature{background:var(--foam); color:var(--sea);}
+  .tag-sea .tag{background:var(--blue-soft); color:var(--blue);}
+  .tag-food .tag{background:var(--coral-soft); color:var(--coral);}
+  .tag-cafe .tag{background:var(--brown-soft); color:var(--brown);}
+  .tag-shop .tag{background:var(--gold-soft); color:var(--gold);}
+  .card-desc{font-size:13.3px; color:var(--text-soft); line-height:1.55; margin-top:7px;}
+  .card-tip{
+    margin-top:10px; background:var(--foam); border-radius:10px; padding:9px 11px;
+    font-size:12px; color:var(--sea); line-height:1.5; display:flex; gap:6px;
+  }
+  .card-tip b{color:var(--ink);}
+  .photo-badge{
+    margin-top:9px; display:inline-flex; align-items:center; gap:5px;
+    font-size:11px; font-weight:700; color:var(--coral);
+    background:var(--coral-soft); padding:4px 9px; border-radius:100px;
+  }
+
+  /* ---------- SECTION: SHOPPING LIST ---------- */
+  .section{padding:22px 20px 4px;}
+  .section-title{
+    font-family:'Fraunces',serif; font-size:19px; font-weight:600; font-style:italic;
+    margin-bottom:12px; display:flex; align-items:center; gap:8px;
+  }
+  .checklist{display:flex; flex-direction:column; gap:8px;}
+  .check-item{
+    display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--line);
+    border-radius:12px; padding:11px 13px; font-size:13.5px; font-weight:500;
+  }
+  .check-item input{width:18px; height:18px; accent-color:var(--sea); flex-shrink:0;}
+  .check-item span.price{margin-left:auto; font-size:11.5px; color:var(--text-soft); font-weight:600;}
+  .check-item:has(input:checked){background:var(--foam); text-decoration:line-through; color:var(--text-soft);}
+
+  .tip-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .tip-card{
+    background:#fff; border:1px solid var(--line); border-radius:14px; padding:13px;
+  }
+  .tip-card .icon{font-size:20px;}
+  .tip-card .ttl{font-size:12.5px; font-weight:700; margin-top:6px;}
+  .tip-card .desc{font-size:11.5px; color:var(--text-soft); margin-top:3px; line-height:1.5;}
+
+  .footer-note{
+    margin:26px 20px 0; padding:16px; border-radius:14px;
+    background:var(--ink); color:rgba(255,255,255,0.85); font-size:12px; line-height:1.7;
+    text-align:center;
+  }
+  .footer-note b{color:#fff;}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO / 보딩패스 -->
+  <div class="hero">
+    <div class="hero-eyebrow">Boarding Pass · Busan ⇢ Tsushima</div>
+    <div class="hero-title display">TSUSHIMA</div>
+    <div class="hero-sub">대마도 2박 3일 · 감성 여행 일정</div>
+    <div class="hero-meta">
+      <div class="hero-chip">🎫 부산항 → 히타카츠 · 이즈하라 → 부산항</div>
+      <div class="hero-chip">👯 친구 · 연인 동반</div>
+    </div>
+    <div class="route">
+      <span>부산</span>
+      <span class="line"></span>
+      <span class="dot"></span>
+      <span class="line"></span>
+      <span>대마도</span>
+    </div>
+  </div>
+  <div class="perforation perforation-top"></div>
+
+  <!-- DAY TABS -->
+  <div class="tabs">
+    <div class="tab active" data-day="1"><div class="tnum display">DAY 1</div><div class="tloc">히타카츠</div></div>
+    <div class="tab" data-day="2"><div class="tnum display">DAY 2</div><div class="tloc">이즈하라</div></div>
+    <div class="tab" data-day="3"><div class="tnum display">DAY 3</div><div class="tloc">출항</div></div>
+  </div>
+
+  <!-- ================= DAY 1 ================= -->
+  <div class="day active" id="day1">
+    <div class="day-head">
+      <div class="dtitle display">Day 1 — 에메랄드 바다에 물들기</div>
+      <div class="ddesc">부산에서 대마도 북쪽 히타카츠로 입도, 대마도 최고의 해변과 로컬 맛집으로 채우는 첫날</div>
+    </div>
+    <div class="timeline">
+
+      <div class="stop tag-sea">
+        <div class="time">08:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">부산항 국제여객터미널 출발</div><span class="tag">바다</span></div>
+          <div class="card-desc">씨플라워·니나·쓰시마링크 등 여객선으로 약 1시간~1시간 30분이면 히타카츠항 도착. 여권과 왕복 승선권 미리 챙기기.</div>
+        </div>
+      </div>
+
+      <div class="stop tag-food">
+        <div class="time">11:30</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">히타카츠 항구 맛집에서 점심</div><span class="tag">맛집</span></div>
+          <div class="card-desc">항구 근처 인기 스시집이나 대마도식 로컬버거로 가볍게 첫 끼. 좌석이 적은 곳은 붐빌 수 있어 도착하자마자 이동하는 게 좋아요.</div>
+          <div class="card-tip">🍣 <span><b>추천</b> — 미나토스시(회·튀김), 키요버거(츠시마 로컬버거)</span></div>
+        </div>
+      </div>
+
+      <div class="stop tag-nature">
+        <div class="time">13:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">미우다 해변</div><span class="tag tag-nature">자연</span></div>
+          <div class="card-desc">대마도 최고 절경으로 꼽히는 해변. 에메랄드빛 바다와 몽돌·백사장이 어우러지고, 바다 앞까지 나무 데크가 잘 정비되어 있어 산책하기 좋아요.</div>
+          <div class="photo-badge">📸 인생샷 스팟</div>
+        </div>
+      </div>
+
+      <div class="stop tag-nature">
+        <div class="time">15:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">도요사키 신사 해안 산책</div><span class="tag tag-nature">자연</span></div>
+          <div class="card-desc">미우다 해변에서 이어지는 조용한 해안 산책로. 신사 뒤로 펼쳐지는 바다 전망이 예뻐서 잠깐 걷기 좋은 코스예요.</div>
+        </div>
+      </div>
+
+      <div class="stop tag-cafe">
+        <div class="time">16:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">로컬 카페에서 티타임</div><span class="tag tag-cafe">카페</span></div>
+          <div class="card-desc">해변 근처 작은 카페에서 커피 한 잔. 대마도는 규모가 크지 않은 만큼, 아기자기한 로컬 카페 위주로 여유롭게 둘러보는 걸 추천해요.</div>
+        </div>
+      </div>
+
+      <div class="stop tag-food">
+        <div class="time">18:30</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">저녁 — 라멘 or 해산물</div><span class="tag">맛집</span></div>
+          <div class="card-desc">진한 국물의 돈코츠 라멘이나, 대마도 명물인 아나고(붕장어) 요리로 하루를 마무리. 아나고 전문점은 점심 시간대만 여는 곳도 있으니 저녁엔 라멘집 추천.</div>
+          <div class="card-tip">🍜 <span><b>추천</b> — 기류켄(라멘), 죠의식당(가정식)</span></div>
+        </div>
+      </div>
+
+      <div class="stop tag-sea">
+        <div class="time">20:30</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">숙소 체크인 &amp; 자판기 산책</div><span class="tag">바다</span></div>
+          <div class="card-desc">히타카츠 항구 근처엔 아이스크림 자판기가 곳곳에 있어요. 편의점 들러 야식 사고 하루 마무리하기 좋은 조용한 밤 산책.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= DAY 2 ================= -->
+  <div class="day" id="day2">
+    <div class="day-head">
+      <div class="dtitle display">Day 2 — 절벽 전망과 인생샷 신사</div>
+      <div class="ddesc">렌터카로 섬 남쪽 이즈하라까지 내려가며 대마도의 자연·역사·쇼핑을 한 번에</div>
+    </div>
+    <div class="timeline">
+
+      <div class="stop tag-nature">
+        <div class="time">09:30</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">에보시다케 전망대</div><span class="tag tag-nature">자연</span></div>
+          <div class="card-desc">섬 중부, 렌터카로 1시간 남짓. 계단을 오르면 크고 작은 섬과 겹겹의 산이 바다 위에 펼쳐지는 몽환적인 풍경이 기다려요.</div>
+          <div class="photo-badge">📸 인생샷 스팟</div>
+        </div>
+      </div>
+
+      <div class="stop tag-nature">
+        <div class="time">11:30</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">와타즈미 신사 &amp; 가이진 신사</div><span class="tag tag-nature">자연</span></div>
+          <div class="card-desc">바닷속에 세워진 도리이가 인상적인 대마도 대표 포토존. 바로 이어지는 가이진 신사까지 함께 들러 감성샷 챙기기.</div>
+          <div class="photo-badge">📸 인생샷 스팟</div>
+        </div>
+      </div>
+
+      <div class="stop tag-food">
+        <div class="time">13:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">이즈하라 로컬 식당에서 점심</div><span class="tag">맛집</span></div>
+          <div class="card-desc">정갈한 일본 가정식이나, 철판에 직접 구워 먹는 오코노미야키로 든든하게. 한국어 메뉴판이 있는 곳이 많아 편하게 주문 가능해요.</div>
+        </div>
+      </div>
+
+      <div class="stop tag-nature">
+        <div class="time">14:30</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">이즈하라 성터 &amp; 상가 거리 산책</div><span class="tag tag-nature">자연</span></div>
+          <div class="card-desc">조선통신사 기념비, 금석성 유적을 따라 걷는 짧은 역사 산책. 이어지는 상가 거리에서 소품 구경하며 여유롭게 이동.</div>
+        </div>
+      </div>
+
+      <div class="stop tag-cafe">
+        <div class="time">16:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">카페 타임</div><span class="tag tag-cafe">카페</span></div>
+          <div class="card-desc">이즈하라 시내 로컬 카페에서 잠시 휴식. 쇼핑 전 당 충전하기 좋은 타이밍이에요.</div>
+        </div>
+      </div>
+
+      <div class="stop tag-shop">
+        <div class="time">17:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">이즈하라 쇼핑 티아라몰</div><span class="tag tag-shop">쇼핑</span></div>
+          <div class="card-desc">대마도 최대 규모 복합몰. 드럭스토어·100엔샵·잡화·간식까지 원스톱으로 쇼핑 가능해요. 레드캐비지도 근처라 함께 둘러보기 좋아요.</div>
+        </div>
+      </div>
+
+      <div class="stop tag-food">
+        <div class="time">19:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">저녁 — 온천 &amp; 해산물</div><span class="tag">맛집</span></div>
+          <div class="card-desc">나기사노유 온천 근처에서 신선한 해산물로 저녁 식사. 바다 보며 하는 온천욕은 대마도 여행 만족도를 확 끌어올리는 코스예요.</div>
+        </div>
+      </div>
+
+      <div class="stop tag-sea">
+        <div class="time">21:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">이사리비 공원 야경</div><span class="tag">바다</span></div>
+          <div class="card-desc">이즈하라 항구 근처 최고의 전망 포인트. 밤에는 반짝이는 어선 불빛이 보여서 하루를 감성적으로 마무리하기 좋아요.</div>
+          <div class="photo-badge">📸 인생샷 스팟</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= DAY 3 ================= -->
+  <div class="day" id="day3">
+    <div class="day-head">
+      <div class="dtitle display">Day 3 — 달콤하게 마무리, 출항</div>
+      <div class="ddesc">전통 디저트와 마지막 쇼핑을 챙기고 가벼운 마음으로 부산행 배에 오르는 날</div>
+    </div>
+    <div class="timeline">
+
+      <div class="stop tag-cafe">
+        <div class="time">09:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">로컬 베이커리에서 카스마키 픽업</div><span class="tag tag-cafe">카페</span></div>
+          <div class="card-desc">얇은 카스테라에 팥앙금을 돌돌 만 대마도 대표 디저트 카스마키. 오랜 전통의 로컬 베이커리에서 갓 구운 걸로 아침 대용 겸 선물용 픽업.</div>
+        </div>
+      </div>
+
+      <div class="stop tag-sea">
+        <div class="time">10:30</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">만제키바시</div><span class="tag">바다</span></div>
+          <div class="card-desc">바다 위 붉은 아치 다리. 동선상 여유가 되면 잠깐 들러 마지막 인생샷을 남기기 좋은 포인트예요.</div>
+          <div class="photo-badge">📸 인생샷 스팟</div>
+        </div>
+      </div>
+
+      <div class="stop tag-shop">
+        <div class="time">11:30</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">밸류마트 마지막 쇼핑</div><span class="tag tag-shop">쇼핑</span></div>
+          <div class="card-desc">킷캣 한정판 초콜릿, 오리히로 젤리, DHC 영양제, 폼클렌징, 동전파스 등 여행 필수 쇼핑리스트를 이 한 곳에서 해결.</div>
+        </div>
+      </div>
+
+      <div class="stop tag-food">
+        <div class="time">13:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">항구 근처에서 마지막 한 끼</div><span class="tag">맛집</span></div>
+          <div class="card-desc">가벼운 우동이나 소바로 속을 편하게 채우고 출항 준비. 면세 화장품점이 근처면 짬 내서 들르기.</div>
+        </div>
+      </div>
+
+      <div class="stop tag-sea">
+        <div class="time">15:00</div>
+        <div class="card">
+          <div class="card-top"><div class="card-title">부산행 출항</div><span class="tag">바다</span></div>
+          <div class="card-desc">출항 시간은 여객선사·항구별로 다르니 예약 시각을 꼭 재확인하고 여유 있게 승선 수속하기.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SHOPPING CHECKLIST -->
+  <div class="section">
+    <div class="section-title">🛍️ 쇼핑 체크리스트</div>
+    <div class="checklist">
+      <label class="check-item"><input type="checkbox"> 킷캣 한정판 초콜릿 <span class="price">간식</span></label>
+      <label class="check-item"><input type="checkbox"> 오리히로 곤약젤리 <span class="price">간식</span></label>
+      <label class="check-item"><input type="checkbox"> DHC 영양제 / 립밤 <span class="price">뷰티</span></label>
+      <label class="check-item"><input type="checkbox"> 카스마키 (선물용) <span class="price">디저트</span></label>
+      <label class="check-item"><input type="checkbox"> 동전파스 <span class="price">생활</span></label>
+      <label class="check-item"><input type="checkbox"> 폼클렌징 / 미니 화장품 <span class="price">뷰티</span></label>
+    </div>
+  </div>
+
+  <!-- TRAVEL TIPS -->
+  <div class="section">
+    <div class="section-title">✨ 여행 꿀팁</div>
+    <div class="tip-grid">
+      <div class="tip-card">
+        <div class="icon">🛂</div>
+        <div class="ttl">여권 필수</div>
+        <div class="desc">가깝지만 엄연한 해외. 여권 유효기간 미리 확인하기.</div>
+      </div>
+      <div class="tip-card">
+        <div class="icon">🚗</div>
+        <div class="ttl">렌터카 추천</div>
+        <div class="desc">히타카츠·이즈하라 간 이동이 길어 국제운전면허 + 렌터카가 편해요.</div>
+      </div>
+      <div class="tip-card">
+        <div class="icon">💴</div>
+        <div class="ttl">엔화 환전</div>
+        <div class="desc">로컬 식당·소형 카페는 카드가 안 되는 곳이 많아 현금 필수.</div>
+      </div>
+      <div class="tip-card">
+        <div class="icon">🗑️</div>
+        <div class="ttl">쓰레기는 소지</div>
+        <div class="desc">길거리 쓰레기통이 거의 없어요. 개인 봉투 하나 챙기면 편해요.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <b>TSUSHIMA · 2박 3일</b><br>
+    바다 · 자연 · 맛집 · 카페 · 쇼핑, 다섯 가지 취향을 모두 담은 감성 여행
+  </div>
+
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const days = document.querySelectorAll('.day');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      days.forEach(d => d.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('day' + tab.dataset.day).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+</script>
+</body>
+</html>
